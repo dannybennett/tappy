@@ -1,0 +1,60 @@
+[gd_scene load_steps=10 format=3 uid="uid://ca0fk0td78vr4"]
+
+[ext_resource type="Script" path="res://game/game.gd" id="1_7t1qo"]
+[ext_resource type="Texture2D" uid="uid://cw3bmmyqbbman" path="res://assets/background/rocks_2.png" id="1_mu0ii"]
+[ext_resource type="PackedScene" uid="uid://comonmfl6tre6" path="res://plane/plane_cb.tscn" id="2_5ui6s"]
+[ext_resource type="PackedScene" uid="uid://c3a54jm4av0qf" path="res://pipes/pipes.tscn" id="3_a8km0"]
+[ext_resource type="PackedScene" uid="uid://bljr32jwtocfo" path="res://gameover/game_over.tscn" id="5_fd3pe"]
+[ext_resource type="PackedScene" uid="uid://b7e7mbesxyi2t" path="res://hud/hud.tscn" id="6_bclfm"]
+[ext_resource type="AudioStream" uid="uid://mv7r6wu5cvau" path="res://assets/audio/engine.mp3" id="6_kow7x"]
+[ext_resource type="AudioStream" uid="uid://bmkawdd1qv1qn" path="res://assets/audio/game_over.wav" id="7_tomxk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dd6ed"]
+size = Vector2(954, 20)
+
+[node name="Game" type="Node2D"]
+position = Vector2(0, 1)
+script = ExtResource("1_7t1qo")
+pipesScene = ExtResource("3_a8km0")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-10, 399)
+texture = ExtResource("1_mu0ii")
+
+[node name="PlaneCB" parent="." instance=ExtResource("2_5ui6s")]
+position = Vector2(206, 447)
+
+[node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2(0, 779)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+position = Vector2(467, 65)
+shape = SubResource("RectangleShape2D_dd6ed")
+
+[node name="PipesHolder" type="Node" parent="."]
+
+[node name="SpawnU" type="Marker2D" parent="."]
+position = Vector2(530, 340)
+
+[node name="SpawnL" type="Marker2D" parent="."]
+position = Vector2(530, 540)
+
+[node name="SpawnTimer" type="Timer" parent="."]
+wait_time = 1.2
+autostart = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="GameOver" parent="CanvasLayer" instance=ExtResource("5_fd3pe")]
+visible = false
+
+[node name="HUD" parent="CanvasLayer" instance=ExtResource("6_bclfm")]
+
+[node name="EngineSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_kow7x")
+autoplay = true
+
+[node name="GameOverSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_tomxk")
+
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]

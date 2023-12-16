@@ -1,0 +1,76 @@
+[gd_scene load_steps=10 format=3 uid="uid://comonmfl6tre6"]
+
+[ext_resource type="Texture2D" uid="uid://bgev7dgf7w7te" path="res://assets/plane/planes_sheet.png" id="1_0sv7c"]
+[ext_resource type="Script" path="res://assets/plane_cb.gd" id="1_f7a3g"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4rwn4"]
+atlas = ExtResource("1_0sv7c")
+region = Rect2(0, 0, 88, 73)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rki87"]
+atlas = ExtResource("1_0sv7c")
+region = Rect2(88, 0, 88, 73)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u54k7"]
+atlas = ExtResource("1_0sv7c")
+region = Rect2(176, 0, 88, 73)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8b4lf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4rwn4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rki87")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u54k7")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_j6suw"]
+radius = 32.0156
+
+[sub_resource type="Animation" id="Animation_l5xvt"]
+resource_name = "fly"
+length = 0.3
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, -0.349066, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yv2m4"]
+_data = {
+"fly": SubResource("Animation_l5xvt")
+}
+
+[node name="PlaneCB" type="CharacterBody2D" groups=["plane"]]
+script = ExtResource("1_f7a3g")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.75, 0.75)
+sprite_frames = SubResource("SpriteFrames_8b4lf")
+animation = &"fly"
+autoplay = "fly"
+frame_progress = 0.569532
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_j6suw")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_yv2m4")
+}
